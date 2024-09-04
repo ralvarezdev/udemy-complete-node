@@ -1,0 +1,13 @@
+{
+  "name": "how-node-works",
+  "version": "1.0.0",
+  "description": "",
+  "main": "modules.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+     "start": "set UV_THREADPOOL_SIZE=4 & node modules.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "type": "module"
+}
