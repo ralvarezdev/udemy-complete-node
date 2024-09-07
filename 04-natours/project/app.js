@@ -1,6 +1,6 @@
 import express from 'express';
-import tourRouter from './routers/tourRouter.js';
-import userRouter from './routers/userRouter.js';
+import tourRouter from './routers/tour.js';
+import user from './routers/user.js';
 
 const app = express();
 export default app;
@@ -39,5 +39,5 @@ app.delete('/api/v1/tours/:id', deleteTour);
 */
 
 app.use('/api/v1/tours', tourRouter);
-app.use('/api/v1/users', userRouter);
+app.use('/api/v1/users', user);
 
