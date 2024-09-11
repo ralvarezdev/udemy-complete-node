@@ -1,6 +1,8 @@
 import express from 'express';
 import tourRouter from './routers/tour.js';
 import user from './routers/user.js';
+import AppError from './utils/appError.js';
+import { globalErrorHandler } from './controllers/error.js';
 
 const app = express();
 export default app;
@@ -41,3 +43,11 @@ app.delete('/api/v1/tours/:id', deleteTour);
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', user);
 
+// Handling unhandled routes
+app.all('*', (req, res, next) => {
+  const err = new AppError(`Can't find ${req.originalUrl} on this server`, 404);
+  next(err);
+});
+
+// Error-handling middleware
+app.use(globalErrorHandler);

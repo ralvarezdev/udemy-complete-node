@@ -2,6 +2,26 @@ import dotenv from 'dotenv';
 import app from './app.js';
 import mongoose from 'mongoose';
 
+// Promise rejections
+process.on('unhandledRejection', err => {
+  console.log(`${err.name}: ${err.message}`);
+  console.log('UNHANDLED REJECTION! Shutting down...');
+
+  server.close(() => {
+    process.exit(1);
+  });
+});
+
+// Uncaught exceptions
+process.on('uncaughtException', err => {
+  console.log(`${err.name}: ${err.message}`);
+  console.log('UNCAUGHT EXCEPTION! Shutting down...');
+
+  server.close(() => {
+    process.exit(1);
+  });
+});
+
 dotenv.config({ path: './config.env' });
 
 const dbURI = process.env.DATABASE;
@@ -20,6 +40,6 @@ mongoose.connect(dbURI, {
 console.log(process.env.NODE_ENV);
 
 const port = process.env.PORT || 3000;
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`App running on port ${port}...`);
 });
