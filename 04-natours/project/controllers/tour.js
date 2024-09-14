@@ -2,7 +2,7 @@ import Tour from '../models/tour.js';
 import APIFeatures from '../utils/apiFeatures.js';
 import catchAsync from '../utils/catchAsync.js';
 import AppError from '../utils/appError.js';
-import { Types } from 'mongoose';
+import isMongoId from 'validator/lib/isMongoId.js';
 
 /*
 const toursFilename = `./dev-data/data/tours-simple.json`;
@@ -53,14 +53,18 @@ export const getAllTours = catchAsync(async (req, res, next) => {
 
 export const getTour = catchAsync(async (req, res, next) => {
   const id = req.params.id;
-  let objectId;
+  if (!isMongoId(id))
+    throw new AppError('Invalid ID', 400);
+
+  /*
   try {
     objectId = new Types.ObjectId(id);
   } catch (err) {
     throw new AppError('Invalid ID', 400);
   }
+   */
 
-  const tour = await Tour.findById(objectId);
+  const tour = await Tour.findById(id);
 
   if (!tour)
     throw new AppError('No tour found with that ID', 404);

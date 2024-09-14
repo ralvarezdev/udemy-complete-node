@@ -1,10 +1,22 @@
 import express from 'express';
-import { createUser, deleteUser, getAllUsers, getUser, updateUser } from '../controllers/user.js';
+import {
+  deleteUser,
+  forgotPassword,
+  loginUser,
+  protect,
+  resetPassword,
+  signUpUser,
+  updateInfo,
+  updatePassword
+} from '../controllers/authentication.js';
 
-const user = express.Router();
-export default user;
+const userRouter = express.Router();
+export default userRouter;
 
-user.route('/').get(getAllUsers)
-  .post(createUser);
-
-user.route('/:id').get(getUser).patch(updateUser).delete(deleteUser);
+userRouter.route('/signup').post(signUpUser);
+userRouter.route('/login').post(loginUser);
+userRouter.route('/forgotPassword').post(forgotPassword);
+userRouter.route('/resetPassword/:token').patch(resetPassword);
+userRouter.route('/updatePassword').patch(protect, updatePassword);
+userRouter.route('/updateInfo').patch(protect, updateInfo);
+userRouter.route('/delete').delete(protect, deleteUser);

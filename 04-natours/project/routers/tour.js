@@ -9,6 +9,7 @@ import {
   topCheapTours,
   updateTour
 } from '../controllers/tour.js';
+import { protect, restrictTo } from '../controllers/authentication.js';
 
 const tourRouter = express.Router();
 export default tourRouter;
@@ -16,19 +17,19 @@ export default tourRouter;
 // tourRouter.param('id', checkID);
 
 tourRouter.route('/')
-  .get(getAllTours)
-  .post(createTour);
+  .get(protect, getAllTours)
+  .post(protect, createTour);
 
 tourRouter.route('/top-5-cheap')
-  .get(topCheapTours, getAllTours);
+  .get(protect, topCheapTours, getAllTours);
 
 tourRouter.route('/stats')
-  .get(getTourStats);
+  .get(protect, getTourStats);
 
 tourRouter.route('/monthly-plan/:year')
-  .get(getMonthlyPlan);
+  .get(protect, getMonthlyPlan);
 
 tourRouter.route('/:id')
-  .get(getTour)
-  .patch(updateTour)
-  .delete(deleteTour);
+  .get(protect, getTour)
+  .patch(protect, updateTour)
+  .delete(protect, restrictTo('admin', 'lead-guide'), deleteTour);

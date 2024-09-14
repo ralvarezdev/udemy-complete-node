@@ -1,8 +1,8 @@
-import mongoose from 'mongoose';
+import { model, Schema } from 'mongoose';
 import slugify from 'slugify';
-import validator from 'validator';
+import isAscii from 'validator/lib/isAscii.js';
 
-const tourSchema = new mongoose.Schema({
+const tourSchema = new Schema({
   name: {
     type: String,
     required: [true, 'A tour must have a name'],
@@ -10,7 +10,7 @@ const tourSchema = new mongoose.Schema({
     trim: true,
     maxlength: [40, 'A tour name must have less or equal than 40 characters'],
     minLength: [10, 'A tour name must have more or equal than 10 characters'],
-    validate: [validator.isAscii, 'Tour name must only contain characters']
+    validate: [isAscii, 'Tour name must only contain characters']
   },
   slug: String,
   duration: {
@@ -119,7 +119,7 @@ tourSchema.pre('aggregate', function(next) {
 });
 
 
-const Tour = mongoose.model('Tour', tourSchema, 'tours');
+const Tour = model('Tour', tourSchema, 'tours');
 export default Tour;
 
 /*

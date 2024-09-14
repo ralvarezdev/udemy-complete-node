@@ -1,5 +1,7 @@
 import AppError from '../utils/appError.js';
 
+export const isDev = process.env.NODE_ENV === 'development';
+
 const duplicateFieldHandler = errorMessage => {
   const startIndex = errorMessage.indexOf('"');
   const endIndex = errorMessage.indexOf('"', startIndex + 1);
@@ -15,6 +17,10 @@ const validationErrorHandler = err => {
   return new AppError(input, 400);
 };
 
+const jwtInvalidSignatureHandler = () => new AppError('Invalid token. Please log in again!', 401);
+
+const jwtExpirationHandler = () => new AppError('Your token has expired! Please log in again.', 401);
+
 const errorFormatter = err => {
   if (err.isOperational)
     return [err.statusCode, { status: err.status, message: err.message }];
@@ -23,6 +29,8 @@ const errorFormatter = err => {
 
   if (err.code === 11000) error = duplicateFieldHandler(err.message);
   else if (err.name === 'ValidationError') error = validationErrorHandler(err);
+  else if (err.name === 'JsonWebTokenError') error = jwtInvalidSignatureHandler();
+  else if (err.name === 'TokenExpiredError') error = jwtExpirationHandler();
 
   if (error === null)
     return [500, { status: 'error', message: 'Something went wrong' }];
@@ -31,8 +39,6 @@ const errorFormatter = err => {
 };
 
 export const globalErrorHandler = (err, req, res, next) => {
-  const isDev = process.env.NODE_ENV === 'development';
-
   const [statusCode, error] = errorFormatter(err);
   res.status(statusCode).json(isDev ? { ...error, stack: err.stack } : error);
 };

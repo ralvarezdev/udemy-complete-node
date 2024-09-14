@@ -15,8 +15,14 @@
   "dependencies": {
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
+    "express-mongo-sanitize": "file:../../../../../../../AppData/Roaming/npm/node_modules/express-mongo-sanitize",
+    "express-rate-limit": "^7.4.0",
+    "helmet": "file:../../../../../../../AppData/Roaming/npm/node_modules/helmet",
+    "hpp": "file:../../../../../../../AppData/Roaming/npm/node_modules/hpp",
     "mongoose": "^8.6.1",
+    "nodemailer": "file:../../../../../../../AppData/Roaming/npm/node_modules/nodemailer",
     "slugify": "^1.6.6",
-    "validator": "^13.12.0"
+    "validator": "^13.12.0",
+    "xss-clean": "file:../../../../../../../AppData/Roaming/npm/node_modules/xss-clean"
   }
 }
